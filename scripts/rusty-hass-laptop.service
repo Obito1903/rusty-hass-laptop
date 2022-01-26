@@ -6,7 +6,7 @@ Restart=on-failure
 RestartSec=5s
 Type=simple
 StandardOutput=journal
-ExecStart=/home/rodriguess/.local/bin/rusty-hass-laptop
+ExecStart=%h/.cargo/bin/rusty-hass-laptop
 
 [Install]
 WantedBy=default.target
