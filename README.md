@@ -2,16 +2,28 @@
 
 A rust app to send stats about your laptop to Home-assistant
 
-## To build
+## Build
 
 ```sh
 cargo build
+```
+
+### Install
+
+```sh
+cargo install --path .
 ```
 
 ## Run
 
 ```sh
 cargo run
+```
+
+Or if installed :
+
+```sh
+rusty-hass-laptop
 ```
 
 On the first run RHL, a `config.json` file wile be generated in `~/.config/rusty-hass-laptop`.
