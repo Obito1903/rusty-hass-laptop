@@ -57,19 +57,19 @@ impl Sensor<BatteryProvider> for BatteryLevel {
     }
 
     fn get_register_info(&self) -> SensorData<Self::StateType> {
-        return SensorData::RegisterSensor::<Self::StateType> {
+        SensorData::RegisterSensor::<Self::StateType> {
             data: SensorRegisterData {
                 r#type: SensorType::Sensor,
                 unique_id: String::from("battery_level"),
                 name: String::from("Battery Level"),
                 state: self.state,
-                device_class: None,
+                device_class: Some(String::from("battery")),
                 icon: Some(String::from("mdi:battery-unknown")),
                 unit_of_measurement: Some(String::from("%")),
                 state_class: None,
                 entity_category: None,
             },
-        };
+        }
     }
 
     fn get_update_info(&self) -> SensorData<Self::StateType> {
