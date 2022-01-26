@@ -692,7 +692,7 @@ dependencies = [
 
 [[package]]
 name = "rusty-hass-laptop"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "battery",
  "convert_case",
