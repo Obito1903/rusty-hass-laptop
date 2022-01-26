@@ -1,10 +1,15 @@
 [package]
+author = "obito1903"
 edition = "2021"
 name = "rusty-hass-laptop"
 version = "0.1.0"
 
 [dependencies]
 battery = "0.7.8"
-reqwest = {version = "0.11.6"}
+reqwest = {version = "0.11.6", features = ["json","blocking"]}
 serde = {version = "1.0.130", features = ["derive"]}
 serde_json = {version = "1.0"}
+# smbios-lib = {version = "0.8.0"}
+sys-info = {version = "0.9.1"}
+directories = {version = "4.0"}
+convert_case = {version = "0.4.0"}

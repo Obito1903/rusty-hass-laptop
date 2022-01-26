@@ -3,14 +3,17 @@ use serde::Serialize;
 pub mod battery;
 
 pub trait Provider {
-    type DataProvider;
-    fn new() -> Result<Self::DataProvider, &'static str>;
-    fn update(&mut self) -> Result<(), &'static str>;
+    fn new() -> Self;
+    fn update_all(&mut self) -> Result<(), &'static str>;
 }
 
 pub trait Sensor<T: Provider> {
-    fn register_info(&self, provider: &T) -> String;
-    fn update_info(&self, provider: &T) -> String;
+    type StateType: Serialize;
+
+    fn new() -> Self;
+    fn get_current(provider: &T) -> Result<Self::StateType, &'static str>;
+    fn get_register_info(&self) -> SensorData<Self::StateType>;
+    fn get_update_info(&self) -> SensorData<Self::StateType>;
 }
 
 #[derive(Serialize)]
@@ -24,7 +27,7 @@ pub enum SensorType {
 #[serde(rename_all = "snake_case")]
 #[serde(tag = "type")]
 pub enum SensorData<T: Serialize> {
-    UpdateSensorSates { data: SensorUpdateData<T> },
+    UpdateSensorStates { data: SensorUpdateData<T> },
     RegisterSensor { data: SensorRegisterData<T> },
 }
 
@@ -57,14 +60,13 @@ pub struct SensorUpdateData<T: Serialize> {
 
 #[cfg(test)]
 mod tests {
-    use crate::sensors::battery::BatteryLevel;
 
     use super::{battery, Sensor};
     use super::{Provider, SensorData, SensorType, SensorUpdateData};
 
     #[test]
     fn serialize_test() {
-        let req = SensorData::UpdateSensorSates::<u32> {
+        let req = SensorData::UpdateSensorStates::<u32> {
             data: SensorUpdateData {
                 r#type: SensorType::Sensor,
                 unique_id: String::from("battery_level"),
@@ -76,8 +78,14 @@ mod tests {
     }
     #[test]
     fn batlevel_test() {
-        let bat_info = battery::BatteryProvider::new().unwrap();
-        println!("serialized = {}", BatteryLevel.register_info(&bat_info));
-        println!("serialized = {}", BatteryLevel.update_info(&bat_info));
+        let bat_info = battery::BatteryProvider::new();
+        println!(
+            "serialized = {}",
+            serde_json::to_string(&bat_info.level.get_register_info()).unwrap()
+        );
+        println!(
+            "serialized = {}",
+            serde_json::to_string(&bat_info.level.get_update_info()).unwrap()
+        );
     }
 }
