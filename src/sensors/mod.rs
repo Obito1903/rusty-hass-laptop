@@ -1,6 +1,7 @@
 use serde::Serialize;
 
 pub mod battery;
+pub mod cpu;
 
 pub trait Provider {
     fn new() -> Self;
