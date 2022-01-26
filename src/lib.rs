@@ -77,7 +77,9 @@ impl Config {
             if config_path.exists() {
                 Config::load_from_file(config_path.to_str().unwrap().parse().unwrap()).unwrap()
             } else {
-                Config::default()
+                let config = Config::default();
+                config.save_to_file().unwrap();
+                config
             }
         }
     }
